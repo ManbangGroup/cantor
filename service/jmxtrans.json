@@ -1,0 +1,73 @@
+{
+  "servers": [
+    {
+      "port": "9002",
+      "host": "localhost",
+      "outputWriters": [
+        {
+          "@class": "com.googlecode.jmxtrans.model.output.InfluxDbWriterFactory",
+          "url": "http://influxdb:8086/",
+          "username": "admin",
+          "password": "123456",
+          "database": "jmxdb",
+          "tags": {
+            "application": "cantor_service",
+            "hostName": "${hostName}"
+          }
+        }
+      ],
+      "queries": [
+        {
+          "obj": "java.lang:type=Memory",
+          "resultAlias": "MemoryImpl",
+          "attr": [
+            "HeapMemoryUsage",
+            "NonHeapMemoryUsage"
+          ]
+        },
+        {
+          "obj": "java.lang:type=Threading",
+          "resultAlias": "JvmThreadingImpl",
+          "attr": [
+            "DaemonThreadCount",
+            "PeakThreadCount",
+            "ThreadCount",
+            "TotalStartedThreadCount"
+          ]
+        },
+        {
+          "obj": "java.lang:type=OperatingSystem",
+          "resultAlias": "OperatingSystemImpl",
+          "attr": [
+            "SystemLoadAverage",
+            "AvailableProcessors",
+            "TotalPhysicalMemorySize",
+            "FreePhysicalMemorySize",
+            "TotalSwapSpaceSize",
+            "FreeSwapSpaceSize",
+            "OpenFileDescriptorCount",
+            "MaxFileDescriptorCount",
+            "ProcessCpuLoad",
+            "ProcessCpuTime",
+            "SystemCpuLoad"
+          ]
+        },
+        {
+          "obj": "java.lang:type=GarbageCollector,*",
+          "resultAlias": "GarbageCollectorImpl",
+          "attr": [
+            "CollectionCount",
+            "CollectionTime"
+          ]
+        },
+        {
+          "obj": "java.lang:type=MemoryPool,*",
+          "resultAlias": "MemoryPoolImpl",
+          "attr": [
+            "Usage"
+          ]
+        }
+      ]
+    }
+  ]
+}

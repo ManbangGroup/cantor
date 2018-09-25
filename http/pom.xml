@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>io.cantor</groupId>
+        <artifactId>cantor-parent</artifactId>
+        <version>1.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>http</artifactId>
+
+    <properties>
+        <javac.verbose>true</javac.verbose>
+        <javac.target.version>1.8</javac.target.version>
+        <javac.source.version>1.8</javac.source.version>
+
+        <maven.compiler.plugin.version>3.6.1</maven.compiler.plugin.version>
+
+        <netty.version>4.1.28.Final</netty.version>
+        <netty-tcnative.version>2.0.12.Final</netty-tcnative.version>
+        <typesafe.config.version>1.3.1</typesafe.config.version>
+        <slf4j.version>1.7.25</slf4j.version>
+        <jackson.version>2.8.8</jackson.version>
+        <lombok.version>1.16.16</lombok.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>${netty.version}</version>
+        </dependency>
+
+        <!--<dependency>-->
+            <!--<groupId>io.netty</groupId>-->
+            <!--<artifactId>netty-tcnative-boringssl-static</artifactId>-->
+            <!--<version>${netty-tcnative.version}</version>-->
+        <!--</dependency>-->
+
+        <dependency>
+            <groupId>com.typesafe</groupId>
+            <artifactId>config</artifactId>
+            <version>${typesafe.config.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <artifactSet>
+                                <excludes>
+                                    <exclude>org.slf4j:slf4j-api:jar:*</exclude>
+                                    <exclude>com.typesafe:config:jar:*</exclude>
+                                </excludes>
+                            </artifactSet>
+                            <relocations>
+                                <relocation>
+                                    <pattern>io.netty.</pattern>
+                                    <shadedPattern>io.cantor.http.shade.io.netty.
+                                    </shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.fasterxml.</pattern>
+                                    <shadedPattern>io.cantor.http.shade.com.fasterxml.
+                                    </shadedPattern>
+                                </relocation>
+                            </relocations>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ComponentsXmlResourceTransformer"/>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.plugin.version}</version>
+                <configuration>
+                    <verbose>${javac.verbose}</verbose>
+                    <target>${javac.target.version}</target>
+                    <source>${javac.source.version}</source>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

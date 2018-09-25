@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>io.cantor</groupId>
+        <artifactId>cantor-parent</artifactId>
+        <version>1.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>service</artifactId>
+
+    <name>Global Sequence Service</name>
+
+    <properties>
+        <javac.verbose>true</javac.verbose>
+        <javac.target.version>1.8</javac.target.version>
+        <javac.source.version>1.8</javac.source.version>
+
+        <maven.deploy.skip>true</maven.deploy.skip>
+        <maven.jar.plugin.version>3.0.2</maven.jar.plugin.version>
+        <maven.compiler.plugin.version>3.6.1</maven.compiler.plugin.version>
+        <git.commit.plugin.version>2.2.4</git.commit.plugin.version>
+
+
+        <lombok.version>1.16.16</lombok.version>
+        <guava.version>23.2-jre</guava.version>
+        <junit.version>4.12</junit.version>
+        <jmh.version>1.18</jmh.version>
+
+        <cache.cloud.version>1.0-SNAPSHOT</cache.cloud.version>
+        <hbase.client.version>1.4.2</hbase.client.version>
+
+        <log4j.version>2.11.1</log4j.version>
+        <jackson.version>2.8.8</jackson.version>
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+
+        <!-- cache cloud from DBA -->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>2.9.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.cantor</groupId>
+            <artifactId>http</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <!-- hbase -->
+        <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-client</artifactId>
+            <version>${hbase.client.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>sl4j-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- test -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-core</artifactId>
+            <version>${jmh.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-generator-annprocess</artifactId>
+            <version>${jmh.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>${maven.jar.plugin.version}</version>
+                <configuration>
+                    <includes>
+                        <include>**/*.class</include>
+                        <include>
+                            **/${project.groupId}-${project.artifactId}-${project.version}.json
+                        </include>
+                    </includes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.plugin.version}</version>
+                <configuration>
+                    <verbose>${javac.verbose}</verbose>
+                    <target>${javac.target.version}</target>
+                    <source>${javac.source.version}</source>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <appendAssemblyId>false</appendAssemblyId>
+                            <descriptors>
+                                <descriptor>src/assemblies/service-assembly.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+                <version>${git.commit.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>get-the-git-infos</id>
+                        <goals>
+                            <goal>revision</goal>
+                        </goals>
+                        <phase>compile</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
+                    <generateGitPropertiesFile>true</generateGitPropertiesFile>
+                    <generateGitPropertiesFilename>
+                        ${project.build.outputDirectory}/META-INF/${project.groupId}-${project.artifactId}-${project.version}.json
+                    </generateGitPropertiesFilename>
+                    <format>json</format>
+                    <failOnNoGitDirectory>false</failOnNoGitDirectory>
+                    <failOnUnableToExtractRepoInfo>false</failOnUnableToExtractRepoInfo>
+                    <includeOnlyProperties>
+                        <includeOnlyProperty>git.branch</includeOnlyProperty>
+                        <includeOnlyProperty>git.build.host</includeOnlyProperty>
+                        <includeOnlyProperty>git.build.time</includeOnlyProperty>
+                        <includeOnlyProperty>git.build.user.email</includeOnlyProperty>
+                        <includeOnlyProperty>git.build.version</includeOnlyProperty>
+                        <includeOnlyProperty>git.commit.id$</includeOnlyProperty>
+                        <includeOnlyProperty>git.dirty</includeOnlyProperty>
+                    </includeOnlyProperties>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

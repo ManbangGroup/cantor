@@ -1,0 +1,50 @@
+version: "3"
+services:
+  service:
+    image: cantor:latest
+    build: ./service/
+    deploy:
+      replicas: 3
+    ports:
+      - "8080:8080"
+    depends_on:
+      - "hbase"
+      - "redis"
+      - "influxdb"
+
+
+  redis:
+    image: "redis:alpine"
+
+  grafana:
+    image: "grafana/grafana"
+    ports:
+      - "3000:3000"
+
+  hbase:
+#    image: harisekhon/hbase-dev:latest
+    image: cantor-hbase-dev:latest
+    build: ./hbase/
+    ports:
+#      - 2181:2181   #hbase-manage 管理ZK端口
+#      - 8090:8080
+      - 8085:8085
+#      - 9090:9090
+      - 9095:9095
+#      - 16000:16000
+      - 16010:16010
+#      - 16201:16201
+      - 16301:16301
+
+  influxdb:
+    image: "influxdb:1.6.2"
+    ports:
+      - "8086:8086"
+    environment:
+      - "INFLUXDB_DB=jmxdb"
+      - "INFLUXDB_ADMIN_USER=admin"
+      - "INFLUXDB_ADMIN_PASSWORD=123456"
+
+  jmeter:
+    image: jmeter:v1
+    build: ./jmeter/

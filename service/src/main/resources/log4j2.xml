@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="WARN">
+    <appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+        </Console>
+
+        <RollingFile append="false" name="Rolling" fileName="./root.log"
+                     filePattern="root.yyyy_MMM_%i.log">
+            <PatternLayout>
+                <pattern>%d %p %C [%t] %m%n</pattern>
+            </PatternLayout>
+
+            <SizeBasedTriggeringPolicy size="100mb" />
+        </RollingFile>
+
+    </appenders>
+    <loggers>
+        <root level="info">
+            <appender-ref ref="Console" level="error"/>
+            <appender-ref ref="Rolling" />
+        </root>
+
+        <logger name="io.cantor.service.clients" additivity="false">
+            <AppenderRef ref="Console" level="error"/>
+            <appender-ref ref="Rolling" level="info"/>
+        </logger>
+    </loggers>
+</configuration>
