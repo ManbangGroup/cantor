@@ -1,2 +1,2 @@
 #!/bin/bash
-tail -f /cator/result
+tail -f /cantor/result

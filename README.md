@@ -56,7 +56,7 @@ A Java SDK to improve the productivity of interacting with Cantor service.
 Monitoring by [jmxtrans](https://github.com/jmxtrans/jmxtrans) & [influxdb](https://github.com/influxdata/influxdb) &
  [grafana](https://github.com/grafana/grafana)
 
-![Monitoring](https://raw.githubusercontent.com/git-hacker/cantor/master/images/monitoring.png)
+![Monitoring](https://raw.githubusercontent.com/ManbangGroup/cantor/master/images/monitoring.png)
 
 - Build and deploy the docker images
 - Open grafana `http://localhost:3000`

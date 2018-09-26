@@ -1,6 +1,6 @@
 FROM openjdk:8-jdk-alpine
 
-ARG SC_HOME="/cator"
+ARG SC_HOME="/cantor"
 
 RUN mkdir ${SC_HOME} \
     && mkdir /jmeter
@@ -31,4 +31,4 @@ ENV PATH $JMETER_HOME/bin:$PATH
 
 WORKDIR ${SC_HOME}
 
-CMD chmod +x run.sh && sh /cator/run.sh
+CMD chmod +x run.sh && sh /cantor/run.sh

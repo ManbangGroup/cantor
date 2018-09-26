@@ -104,7 +104,7 @@
                 <assertionsResultsToSave>0</assertionsResultsToSave>
               </value>
             </objProp>
-            <stringProp name="filename">/cator/result1.text</stringProp>
+            <stringProp name="filename">/cantor/result1.text</stringProp>
             <boolProp name="ResultCollector.success_only_logging">true</boolProp>
           </ResultCollector>
           <hashTree/>
@@ -120,7 +120,7 @@
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
             <boolProp name="resetInterpreter">false</boolProp>
-            <stringProp name="script">FileWriter fw=new FileWriter(&quot;/cator/r.csv&quot;,true);
+            <stringProp name="script">FileWriter fw=new FileWriter(&quot;/cantor/r.csv&quot;,true);
 BufferedWriter out=new BufferedWriter(fw);
 out.write(vars.get(&quot;pro_id&quot;));
 out.write(System.getProperty(&quot;line.separator&quot;));
@@ -133,7 +133,7 @@ fw.close();
         <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV 数据文件设置" enabled="true">
           <stringProp name="delimiter">,</stringProp>
           <stringProp name="fileEncoding">utf-8</stringProp>
-          <stringProp name="filename">/cator/r.csv</stringProp>
+          <stringProp name="filename">/cantor/r.csv</stringProp>
           <boolProp name="ignoreFirstLine">false</boolProp>
           <boolProp name="quotedData">false</boolProp>
           <boolProp name="recycle">true</boolProp>
